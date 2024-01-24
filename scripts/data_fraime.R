@@ -51,3 +51,66 @@ surveys$sex
 surveys_200 <- surveys[200, ]
 surveys[nrow(surveys), ]
 surveys[nrow(surveys)/2, ]
+
+#factors - guardo struttura, guardo come è la colonna, la trasformo in un fattore
+str(surveys)
+surveys$sex
+surveys$sex <- factor(surveys$sex)
+surveys$sex
+
+levels(surveys$sex)
+nlevels(surveys$sex)
+
+sex <- factor(c("male", "female", "female", "male"))
+sex <- factor(sex, levels = c("male", "female"))
+
+#challenge - trasforma taxa e genus in fattori
+surveys$taxa <- factor(surveys$taxa)
+surveys$genus <- factor (surveys$genus)
+surveys$taxa
+surveys$genus
+
+#quanti genera in gus column? ovvero quanti livelli
+nlevels(surveys$genus)
+
+#quanti rabbit in taxa. Primo sistema ma il secondo funziona eprchè adesso li ho dati come fattori
+sum(surveys$taxa == "Rabbit")
+summary(surveys)
+
+# convert factors come caratteri o numero
+sex
+as.character(sex)
+
+year_fct <- factor(c(1990, 1983, 1977, 1997))
+year_fct
+
+#option1
+as.numeric(year_fct)
+#option2
+as.numeric(as.character(year_fct))
+as.numeric(levels(year_fct))[year_fct]
+
+as.factor(c(1990, 1983, 1977, 1997))
+
+#Renaming factors
+plot(surveys$sex)
+#mi accorgo di NAs che non sono plottati
+summary(surveys$sex)
+#rinomino, mi accorgo ora che Na è un livello e lo rinomino
+sex <- surveys$sex
+levels(sex)
+sex <-   addNA(sex)
+levels(sex)
+
+levels(sex)[3] <- "undetermined"
+levels(sex)
+sex
+
+plot(sex)
+
+levels(sex) [1:2] <- c("female", "male")
+plot(sex)
+
+sex <- factor(sex, levels = c("undetermined", "female", "male"))
+plot(sex)
+
