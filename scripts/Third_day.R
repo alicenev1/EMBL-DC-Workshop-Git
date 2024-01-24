@@ -157,9 +157,46 @@ surveys_gw <- surveys %>%
 View(surveys_gw)
 str(surveys_gw)
 
+#versione wider
 surveys_gw %>% 
   pivot_wider(names_from = genus, values_from = mean_weight)
-#vedo che ci sono NA e li sostituisco con 0
 
+#vedo che ci sono NA e li sostituisco con 0
 surveys_gw %>% 
   pivot_wider(names_from = genus, values_from = mean_weight, values_fill = 0)
+
+#versione longer partendo da wide - uso tutte le colonne tranne plot_id
+surveys_wide <- surveys_gw %>%
+  pivot_wider(names_from = genus, values_from = mean_weight, values_fill = 0)
+
+surveys_wide %>%
+  pivot_longer(names_to = "genus", values_to = "mean_weight", col = -plot_id)
+
+surveys_long <- surveys_wide %>%
+  pivot_longer(names_to = "genus", values_to = "mean_weight", col = -plot_id)
+
+view(surveys)
+
+#challenge3.10
+surveys %>% 
+  pivot_longer(names_to = "measurement", values_to = "value", cols = c(hindfoot_length, weight))
+
+#challenge3.11
+surveys_long <- surveys %>% 
+  pivot_longer(names_to = "measurement", values_to = "value", cols = c(hindfoot_length, weight))
+
+surveys_long %>% 
+  group_by(year, measurement, plot_type) %>% 
+  summarise(mean_value = mean(value, na.rm = T)) %>% 
+  pivot_wider(names_from = measurement, values_from = mean_value)
+
+surveys_complete <- surveys %>% 
+  filter(!is.na(weight),
+         !is.na(hindfoot_length),
+         !is.na(sex))
+
+surveys_complete
+
+#come salvare un file, e come specificare il dove
+write_csv(surveys_complete, file = "surveys_complete.csv")
+write_csv(surveys_complete, file = "data_raw/surveys_complete.csv")
